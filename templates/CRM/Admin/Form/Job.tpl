@@ -109,7 +109,7 @@ CRM.$(function($) {
     <tr class="crm-job-form-block-schedule_at">
         <td class="label">{$form.schedule_at.label}</td>
         <td>
-            {$form.schedule_at.html}
+            {if $hideCalender neq true}{include file="CRM/common/jcalendar.tpl" elementName=schedule_at}{else}{$schedule_at|crmDate}{/if}<br />
             <div dlass="description">{ts}Specify the date / time this job should {$schedule_at}.
               Leave blank to run {if $schedule_at eq 'first be run'}as soon as possible{else}at next scheduled interval{/if}.{/ts}
             </div>
