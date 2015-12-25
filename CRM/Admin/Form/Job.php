@@ -103,7 +103,7 @@ class CRM_Admin_Form_Job extends CRM_Admin_Form {
     /************************************
      * begin com.klangsoft.flexiblejobs *
      ************************************/
-    $this->add('text', 'schedule_at', ts(($this->_id ? 'Next' : 'First') . ' Run Date / Time'), 'size="40"');
+    $this->addDateTime('schedule_at', ts(($this->_id ? 'Next' : 'First') . ' Run Date / Time'), FALSE, array('formatType' => 'activityDateTime'));
 
     $this->assign('schedule_at', $this->_id ? 'run next' : 'first be run');
     /**********************************
