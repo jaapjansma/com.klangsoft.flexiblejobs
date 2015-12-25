@@ -174,7 +174,8 @@ class CRM_Admin_Form_Job extends CRM_Admin_Form {
      * begin com.klangsoft.flexiblejobs *
      ************************************/
     if ($ts = CRM_Core_BAO_Setting::getItem('com.klangsoft.flexiblejobs', 'job_' . $this->_id)) {
-      $defaults['schedule_at'] = date('r', $ts);
+      $defaults['schedule_at'] = date('m/d/Y', $ts);
+      $defaults['schedule_at_time'] = date('h:iA', $ts);
     }
     /**********************************
      * end com.klangsoft.flexiblejobs *
@@ -226,11 +227,18 @@ class CRM_Admin_Form_Job extends CRM_Admin_Form {
     /************************************
      * begin com.klangsoft.flexiblejobs *
      ************************************/
-    $ts = strtotime($values['schedule_at']);
-    if ($ts < time()) {
-      $ts = null;
+    $dt = '';
+    if (!empty($values['schedule_at'])) {
+      $dt = $values['schedule_at'] . ' ';;
     }
-    CRM_Core_BAO_Setting::setItem($ts ?: null, 'com.klangsoft.flexiblejobs', 'job_' . $dao->id);
+    if (!empty($values['schedule_at_time'])) {
+      $dt .= $values['schedule_at_time'];
+    }
+    $ts = strtotime(trim($dt));
+    if ($ts < time()) {
+      $ts = NULL;
+    }
+    CRM_Core_BAO_Setting::setItem($ts ?: NULL, 'com.klangsoft.flexiblejobs', 'job_' . $dao->id);
     /**********************************
      * end com.klangsoft.flexiblejobs *
      **********************************/

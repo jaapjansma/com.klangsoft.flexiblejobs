@@ -99,10 +99,12 @@ class CRM_Core_ScheduledJob {
     $ts = CRM_Core_BAO_Setting::getItem('com.klangsoft.flexiblejobs', $key);
     if (!is_null($ts)) {
       if ($ts < time()) {
-        CRM_Core_BAO_Setting::setItem(null, 'com.klangsoft.flexiblejobs', $key);
+        CRM_Core_BAO_Setting::setItem(NULL, 'com.klangsoft.flexiblejobs', $key);
         return TRUE;
       }
-      else return FALSE;
+      else {
+        return FALSE;
+      }
     }
     /**********************************
      * end com.klangsoft.flexiblejobs *
