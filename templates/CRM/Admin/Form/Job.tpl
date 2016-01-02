@@ -108,10 +108,9 @@ CRM.$(function($) {
     {* begin com.klangsoft.flexiblejobs *}
     <tr class="crm-job-form-block-schedule_at">
         <td class="label">{$form.schedule_at.label}</td>
-        <td>
-            {if $hideCalender neq true}{include file="CRM/common/jcalendar.tpl" elementName=schedule_at}{else}{$schedule_at|crmDate}{/if}<br />
-            <div dlass="description">{ts}Specify the date / time this job should {$schedule_at}.
-              Leave blank to run {if $schedule_at eq 'first be run'}as soon as possible{else}at next scheduled interval{/if}.{/ts}
+        <td>{include file="CRM/common/jcalendar.tpl" elementName=schedule_at}<br />
+            <div dlass="description">{ts}Do not run this job before this date / time. The run frequency selected above will apply thereafter.{/ts}<br />
+              {if $action eq 1}{ts}Leave blank to run as soon as possible.{/ts}{else}{ts}Leave blank to run at next run frequency.{/ts}{/if}
             </div>
         </td>
     </tr>

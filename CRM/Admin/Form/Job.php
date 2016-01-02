@@ -104,8 +104,6 @@ class CRM_Admin_Form_Job extends CRM_Admin_Form {
      * begin com.klangsoft.flexiblejobs *
      ************************************/
     $this->addDateTime('schedule_at', ts(($this->_id ? 'Next' : 'First') . ' Run Date / Time'), FALSE, array('formatType' => 'activityDateTime'));
-
-    $this->assign('schedule_at', $this->_id ? 'run next' : 'first be run');
     /**********************************
      * end com.klangsoft.flexiblejobs *
      **********************************/
@@ -227,16 +225,23 @@ class CRM_Admin_Form_Job extends CRM_Admin_Form {
     /************************************
      * begin com.klangsoft.flexiblejobs *
      ************************************/
-    $dt = '';
-    if (!empty($values['schedule_at'])) {
-      $dt = $values['schedule_at'] . ' ';;
-    }
-    if (!empty($values['schedule_at_time'])) {
-      $dt .= $values['schedule_at_time'];
-    }
-    $ts = strtotime(trim($dt));
+    $ts = strtotime(trim("{$values['schedule_at']} {$values['schedule_at_time']}"));
     if ($ts < time()) {
       $ts = NULL;
+    }
+    else {
+      // warn about monthly/quarterly scheduling, if applicable
+      if (($dao->run_frequency == 'Monthly') || ($dao->run_frequency == 'Quarter')) {
+        $info = getdate($ts);
+        if ($info['mday'] > 28) {
+          CRM_Core_Session::setStatus(
+            ts('Relative month values are calculated based on the length of month(s) that they pass through.
+              The result will land on the same day of the month except for days 29-31 when the target month contains fewer days than the previous month.
+              For example, if a job is scheduled to run on August 31st, the following invocation will occur on October 1st, and then the 1st of every month thereafter.
+              To avoid this issue, please schedule Monthly and Quarterly jobs to run within the first 28 days of the month.'),
+            ts('Warning'), 'info', array('expires' => 0));
+        }
+      }
     }
     CRM_Core_BAO_Setting::setItem($ts ?: NULL, 'com.klangsoft.flexiblejobs', 'job_' . $dao->id);
     /**********************************
