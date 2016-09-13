@@ -1,8 +1,8 @@
 {*
  +--------------------------------------------------------------------+
- | CiviCRM version 4.6                                                |
+ | CiviCRM version 4.4                                                |
  +--------------------------------------------------------------------+
- | Copyright CiviCRM LLC (c) 2004-2015                                |
+ | Copyright CiviCRM LLC (c) 2004-2013                                |
  +--------------------------------------------------------------------+
  | This file is a part of CiviCRM.                                    |
  |                                                                    |
@@ -55,8 +55,8 @@
 
         <div id="fname"><br/>
         </div>
-        <select name="api_entity" type="text" id="api_entity" class="crm-form-select required">
-          {crmAPI entity="Entity" var="entities"}
+        <select name="api_entity" type="text" id="api_entity" class="form-select required">
+          {crmAPI entity="Entity" action="get" var="entities" version=3}
           {foreach from=$entities.values item=entity}
             <option value="{$entity}"{if $entity eq $form.api_entity.value} selected="selected"{/if}>{$entity}</option>
           {/foreach}
@@ -66,44 +66,42 @@
         <div class="description">{ts}Put in the API method name. You need to enter pieces of full API function name as described in the documentation.{/ts}</div>
 <script>
 {literal}
-CRM.$(function($) {
   function assembleName( ) {
 
     // dunno yet
     var apiName = "";
 
     // building prefix
-    if( $('#api_action').val() == '' ) {
-      $('#fname').html( "<em>API name will start appearing here as you type in fields below.</em>" );
+    if( cj('#api_action').val() == '' ) {
+      cj('#fname').html( "<em>API name will start appearing here as you type in fields below.</em>" );
       return;
     }
 
-    var apiPrefix = 'api'
+    apiPrefix = 'api'
 
     // building entity
-    var apiEntity = $('#api_entity').val().replace( /([A-Z])/g, function($1) {
-      return $1.toLowerCase();
-    });
+    var apiEntity = cj('#api_entity').val().replace( /([A-Z])/g, function($1) {
+                                                   return $1.toLowerCase();
+                                                   });
     // building action
-    var apiAction = $('#api_action').val().replace(/(\_[a-z])/g, function($1) {return $1.toUpperCase().replace('_','');});
+    var apiAction = cj('#api_action').val().replace(/(\_[a-z])/g, function($1) {return $1.toUpperCase().replace('_','');});
     apiName = apiPrefix + '.' + apiEntity + '.' + apiAction;
-    $('#fname').text( apiName );
+    cj('#fname').text( apiName );
   }
 
   // bind to different events to build API name live
-  $('#api_entity').change(assembleName)
-  $('#api_action').change(assembleName).keyup(assembleName);
-  assembleName();
-});
+  cj(document).ready( function() { assembleName() } );
+  cj('#api_entity').change( function() { assembleName() } );
+  cj('#api_action').keyup( function() { assembleName() } );
 
 {/literal}
 </script>
 
-      </td>
+			</td>
     </tr>
     <tr class="crm-job-form-block-parameters">
       <td class="label">{$form.parameters.label}<br />{docURL page="Managing Scheduled Jobs" resource="wiki"}</td>
-      <td>{$form.parameters.html}</td>
+			<td>{$form.parameters.html}</td>
     </tr>
     {* begin com.klangsoft.flexiblejobs *}
     <tr class="crm-job-form-block-schedule_at">

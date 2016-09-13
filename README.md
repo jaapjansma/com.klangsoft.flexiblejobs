@@ -1,5 +1,7 @@
 # com.klangsoft.flexiblejobs
 
+**This fork is made compatible with CiviCRM 4.4** If you are using CiviCRM 4.6 use the original extension. 
+
 ## Flexible Jobs
 
 This ia a CiviCRM extension that adds much needed flexibility to scheduled jobs. It accomplishes this goal in two ways...
